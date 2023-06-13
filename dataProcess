@@ -1,0 +1,16 @@
+public class AgenciesTest {
+    @HttpApi(baseUrl = UrlConstants.ONLINE_BASE_URL)
+    AgenciesService agenciesService;
+    
+    @Test(dataProvider = "JsonDataProvider", dataProviderClass = JsonDataProvider.class)
+    public void queryAgencies(JSONObject in, JSONObject expect, String desc) {
+        try {
+            ResponseResult talentInfo = agenciesService.queryAgencies(
+                    in.getString("name"), HttpUtil.getOnlineHeader());
+            log.info(talentInfo.getBody());
+            String code = JSONPath.read(talentInfo.getBody(), "$.code").toString();
+            Assert.assertTrue(code.equals("0"), "code not except" + code);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
